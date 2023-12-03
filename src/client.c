@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 14:16:29 by soelalou          #+#    #+#             */
-/*   Updated: 2023/12/03 17:13:49 by soelalou         ###   ########.fr       */
+/*   Updated: 2023/12/03 17:25:53 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,18 @@ static int check(int ac, char **av)
 	return (1);
 }
 
-void	send_bits(int pid, char c)
+void	send_bits(int pid, char i)
 {
 	int	bit;
 
 	bit = 0;
 	while (bit < 8)
 	{
-		if ((c & (0x01 << bit)) != 0)
+		if ((i & (0x01 << bit)) != 0)
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
-		usleep(100);
+		usleep(1000);
 		bit++;
 	}
 }
