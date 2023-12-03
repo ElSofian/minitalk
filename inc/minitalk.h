@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@42.student.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 14:13:05 by soelalou          #+#    #+#             */
-/*   Updated: 2023/12/02 15:51:48 by soelalou         ###   ########.fr       */
+/*   Updated: 2023/12/03 11:44:26 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <signal.h>
-# include "../libft/libft.h"
+# include <stdarg.h>
+# include <sys/types.h>
 
+# include "../libft/libft.h"
 #endif
