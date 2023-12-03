@@ -3,31 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: soelalou <soelalou@42.student.fr>          +#+  +:+       +#+        */
+/*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 14:16:29 by soelalou          #+#    #+#             */
-/*   Updated: 2023/12/03 11:28:06 by soelalou         ###   ########.fr       */
+/*   Updated: 2023/12/03 17:13:49 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minitalk.h"
 
-static void	ft_confirm(int signal)
+static int check(int ac, char **av)
 {
-	if (signal == SIGUSR1)
-		ft_printf("\033[0;32mQSL!\033[0;32m\n", 1);
-	else
-		ft_printf("\033[0;32mQSL!\033[0;32m\n", 1);
+	int	i;
+
+	i = 0;
+	if (ac != 3)
+	{
+		ft_printf("%s[ERROR]%s Invalid format\n%s->%s \
+./client_bonus <PID> <message>\n", RED, END, GREEN, END);
+		return (-1);
+	}
+	while (av[1][i])
+	{
+		if (!ft_isdigit(av[1][i++]))
+		{
+			ft_printf("%s[ERROR]%s The PID provided is not number\n%s->%s \
+./client_bonus <PID> <message>\n", RED, END, GREEN, END);
+			return (-1);
+		}
+	}
+	if (*(av[2]) == '\0')
+	{
+		ft_printf("%s[ERROR]%s The message provided is empty\n%s->%s \
+./client_bonus <PID> <message>\n", RED, END, GREEN, END);
+			return (-1);
+	}
+	return (1);
 }
 
-void	ft_send_bits(int pid, char i)
+void	send_bits(int pid, char c)
 {
 	int	bit;
 
 	bit = 0;
 	while (bit < 8)
 	{
-		if ((i & (0x01 << bit)) != 0)
+		if ((c & (0x01 << bit)) != 0)
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
@@ -36,29 +57,20 @@ void	ft_send_bits(int pid, char i)
 	}
 }
 
-int	main(int argc, char **argv)
+int	main(int ac, char **av)
 {
 	int	pid;
 	int	i;
 
-	i = 0;
-	if (argc == 3)
-	{
-		pid = ft_atoi(argv[1]);
-		while (argv[2][i] != '\0')
-		{
-			signal(SIGUSR1, ft_confirm);
-			signal(SIGUSR2, ft_confirm);
-			ft_send_bits(pid, argv[2][i]);
-			i++;
-		}
-		ft_send_bits(pid, '\n');
-	}
-	else
-	{
-		ft_printf("\033[91mError: wrong format.\033[0m\n");
-		ft_printf("\033[33mTry: ./client_bonus [PID] [MESSAGE]\033[0m\n");
+	if (check(ac, av) == -1)
 		return (1);
+	pid = ft_atoi(av[1]);
+	i = 0;
+	while (av[2][i])
+	{
+		send_bits(pid, av[2][i]);
+		i++;
 	}
+	send_bits(pid, '\n');
 	return (0);
 }
